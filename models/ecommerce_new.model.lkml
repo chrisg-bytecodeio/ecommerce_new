@@ -25,4 +25,23 @@ persist_with: ecommerce_new_default_datagroup
 # Typically, join parameters require that you define the join type, join relationship, and a sql_on clause.
 # Each joined view also needs to define a primary key.
 
-explore: users {}
+explore: users {
+  join: order_items {
+    type: left_outer
+    sql_on: ${users.id} = ${order_items.user_id} ;;
+    relationship: one_to_many
+  }
+  join: users_crossview {
+    relationship: one_to_one
+    sql:  ;;
+  }
+}
+
+explore: order_items {}
+# explore: order_items {
+#   join: users {
+#     type: left_outer
+#     sql_on:  ${order_items.id} = ${users.id} ;;
+#     relationship: many_to_one
+#   }
+# }

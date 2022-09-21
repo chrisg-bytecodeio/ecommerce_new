@@ -22,6 +22,13 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
+  dimension: age_tiers {
+    type: tier
+    tiers: [18, 25, 35, 45, 55, 65, 75, 90]
+    sql: ${age};;
+    style: integer
+  }
+
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
@@ -39,6 +46,16 @@ view: users {
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
+  }
+
+  dimension: state {
+    type: string
+    sql: ${TABLE}.state ;;
+  }
+
+  dimension: city_and_state {
+    type: string
+    sql: ${TABLE}.city || ', ' || ${TABLE}.state;;
   }
 
   dimension: country {
@@ -94,14 +111,15 @@ view: users {
     sql: ${TABLE}.longitude ;;
   }
 
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
+  }
+
+  dimension: traffic_source_is_email {
+    description: "When Traffic Source is 'Email', this will be 'Yes'"
+    type: yesno
+    sql: ${traffic_source} = 'Email';;
   }
 
   dimension: zip {

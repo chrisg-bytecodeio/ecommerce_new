@@ -31,20 +31,6 @@ view: order_items {
     sql: ${TABLE}.created_at ;;
   }
 
-  dimension_group: delivered {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.delivered_at ;;
-  }
-
   # Here's what a typical dimension looks like in LookML.
   # A dimension is a groupable field that can be used to filter query results.
   # This dimension will be called "Inventory Item ID" in Explore.
@@ -79,20 +65,6 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
-  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
-  # measures for this dimension, but you can also add measures of many different aggregates.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
-  measure: total_sale_price {
-    type: sum
-    sql: ${sale_price} ;;
-  }
-
-  measure: average_sale_price {
-    type: average
-    sql: ${sale_price} ;;
-  }
-
   dimension_group: shipped {
     type: time
     timeframes: [
@@ -105,6 +77,25 @@ view: order_items {
       year
     ]
     sql: ${TABLE}.shipped_at ;;
+  }
+
+  dimension_group: delivered {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.delivered_at ;;
+  }
+
+  dimension: shipping_duration{
+    type: number
+    sql: DATE_DIFF(${delivered_raw}, ${shipped_raw}, day);;
   }
 
   dimension: status {
@@ -121,6 +112,26 @@ view: order_items {
   measure: count {
     type: count
     drill_fields: [detail*]
+  }
+
+  measure: count_orders {
+    description: "A count of unique orders"
+    type: count_distinct
+    sql:  ${order_id} ;;
+  }
+
+  measure: total_sales {
+    description: "Sum of sale price"
+    type: sum
+    sql: ${sale_price};;
+    value_format_name: usd_0
+  }
+
+  measure: average_sales {
+    description: "Average of sale price"
+    type:  average
+    sql:  ${sale_price} ;;
+    value_format_name: usd
   }
 
   # ----- Sets of fields for drilling ------
