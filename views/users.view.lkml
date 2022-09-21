@@ -2,8 +2,7 @@
 view: users {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: `looker-onboarding.ecommerce.users`
-    ;;
+  sql_table_name: `looker-onboarding.ecommerce.users`;;
   drill_fields: [id]
   # This primary key is the unique key for this table in the underlying database.
   # You need to define a primary key in a view in order to join to other views.
@@ -110,10 +109,10 @@ view: users {
     sql: ${TABLE}.zip ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-  }
+  # measure: count {
+  #   type: count
+  #   drill_fields: [detail*]
+  # }
 
   # ----- Sets of fields for drilling ------
   set: detail {
